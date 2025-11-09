@@ -286,17 +286,17 @@
     let val = parseInt(inputs[currentOctet].textContent, 10);
     val = (val + 1) % 256;
     inputs[currentOctet].textContent = val;
-    checkCompletion();
   });
 
   controller.onDecrease(() => {
     let val = parseInt(inputs[currentOctet].textContent, 10);
     val = (val - 1 + 256) % 256;
     inputs[currentOctet].textContent = val;
-    checkCompletion();
+    
   });
 
   controller.onOk(() => {
+    checkCompletion();
     currentOctet = (currentOctet + 1) % 4;
     focusCurrentOctet();
   });
@@ -307,6 +307,7 @@
   });
 
   controller.onNext(() => {
+    checkCompletion();
     currentOctet = (currentOctet + 1) % 4;
     focusCurrentOctet();
   });
