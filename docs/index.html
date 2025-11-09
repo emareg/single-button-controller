@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- title, description, favicon -->
+  <title>Single Button Controller</title>
+	<meta name="author" content="Emanuel Regnath">
+  <meta name="description" content="One Button to rule them all" />
+  <link rel="icon" type="image/png" href="favicon.png">
+
+	<!-- load basic style sheet -->
+	<link rel="stylesheet" href="https://classless.de/classless.css">
+
+  <style>
+  html[data-theme='dark'] {
+    /* foreground   | background color */
+    --cfg:   #c4cbce; --cbg:    #071133;
+    --cdark: #fff8;    --clight: #fff1;
+    --cmed:  #fff4;
+    --clink: #1ad;
+    --cemph: #0b9;    --cemphbg: #0b91;
+  }
+
+  /* auto grid */
+  .autorow { display: flex; margin:  0.5rem -0.5rem; align-items: stretch; }
+  .autorow > * { padding: 0  0.5rem; flex: 1 1 100%; }
+
+  .ip-row{display:flex; gap:10px; align-items:center; margin: 0em auto 2em; justify-content: center;}
+  .octet {
+    display: inline-block;
+    width: 3.5em;
+    height: 2.2em;
+    background: #8882;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 20px;
+    line-height: 2.2em;
+    color: inherit;
+    user-select: none;
+    transition: all 0.1;
+  }
+  .octet.active {
+    outline: 1px solid var(--cemph);
+    box-shadow: 0 0 10px var(--cemph);
+  }
+  .dot{font-size:20px; color:var(--cmed)}
+  .safe-zone {
+    flex: 1;
+    height: 100px;
+    border-radius: 12px;
+    background: #8882;
+    color: var(--clight);
+    align-content: center;
+    text-align: center;
+    margin: 10px 0;
+    user-select: none;
+    touch-action: none;
+  }
+  .elapsed {
+    font-weight: bold;
+  }
+
+  table#gestures td:nth-of-type(2){
+    border-collapse: separate;
+    border-spacing: 5em;
+  } 
+
+  .big{
+    /* font-size: large; */
+    color: var(--cemph);
+    font-weight: bold;
+  }
+
+  </style>
+
+</head>
+<body>
+  <h1>Single Button Controller</h1>
+
+  <p>A concept to emulate a 10-button game controller with just a single button!</p>
+  <p><a href="#demo-app">Skip the talk, play it now!</a></p>
+  <p>No explanation needed? <a href="#demo-app">→ Jump to play the demo!</a></p>
+
+
+  <h3>Basic Commands</h3>
+
+  <table id="gestures">
+  <colgroup>
+    <col><col>
+    <col style="width: 3em;"> <!-- Adds more space after this column -->
+    <col>
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+    <th>Single Gesture</th>      
+    <th>Command</th>
+    <th></th>
+    <th>Tap-before Gesture</th>
+    <th>Inv. Command</th>  
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Short Tap (&le;250ms)</td><td>Increase</td><td></td><td>Double Tap</td><td>Decrease</td></tr>    
+    <tr><td>Long Click (&ge;350ms)</td><td>Ok (Next)</td><td></td><td>Tap-Long Click</td><td>Back (Prev)</td></tr>
+    <tr><td>Extralong Hold (&ge;1.3s)</td><td>Next</td><td></td><td>Tap-Extralong Hold</td><td>Prev</td></tr>
+    <tr><td>Superlong Hold (&ge;8s)</td><td>Menu</td><td></td><td>Tap-Superlong Hold</td><td>Reset</td></tr>
+  </tbody>
+  <caption>Available commands. A short tap before a command “inverts” its meaning.</caption> 
+  </table>
+
+  <h3>Advanced Commands</h3>
+  <p>To speed up navigation, we have a "combo" and "auto" mode build in. Combos: If you short tap again within 1s after a command (before the green/orange light goes off), the last command will be repeated instantly! Only if you wait longer than 1s, you can enter a new command. Only long click (“Ok”) will always be accepted. If you need more speed, hold the button extralong while in combo mode to auto-repeat the last command quickly. The longer you hold, the faster the auto-repeat. Once you release the button, the auto-repeat continues at constant speed until you single tap. </p>
+
+  <style>
+    /* table#commands td:nth-of-type(2){ text-align: start; } */
+    table#commands td:nth-of-type(3),
+    table#commands td:nth-of-type(5),
+    table#commands td:nth-of-type(7),
+    table#commands td:nth-of-type(9){ 
+      color:#0b9; text-align: start; width: 3em;
+    }
+  </style>
+
+      <table id="commands">
+        <thead>
+        <tr>
+          <th colspan="1">Gesture</th>
+          <th colspan="4">Idle-Mode (single / tap-before)</th>
+          <th colspan="2">Combo-Mode</th>
+          <th colspan="2">Auto-Mode</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Short Tap (≤250ms)</td>
+          <td>increase</td><td>+</td><td>decrease</td><td>–</td>
+          <td>repeat</td><td>↻</td><td>stop</td><td>▣</td>
+        </tr>
+        <tr>
+          <td>Long Click (&ge;350ms)</td>
+          <td>ok</td><td>↪</td><td>back</td><td>↶</td>
+          <td>ok</td><td>↪</td><td>slower</td><td>⏪</td>
+        </tr>
+        <tr>
+          <td>Press Hold (&ge;1.3s)</td>
+          <td>next</td><td>⇒</td><td>prev</td><td>⇐</td>
+          <td>→auto-mode</td><td>🔁</td><td>faster</td><td>⏩</td>
+        </tr>
+        </tbody>  
+      </table>
+
+
+
+  <h3>The LED indicator</h3>
+  <p>Since the controller should be implemented for a microcontroller, we expect to have an LED on board that we can use to provide visual feedback. So green means a positive command (+)</p>
+
+
+  <h2 id="demo-app">IP-Spinner demo application (playable)</h2>
+  <p>The goal is to enter a random IPv4 address using a single button. The button can be pressed by clicking or touching into the outlined box below, or by using the keyboard key <code>b</code>. You can directly play around to test all commands. Once you feel ready, hit the “Start Challenge” button to measure your input time.</p>
+
+
+  <button id="startBtn">Start Challenge</button>
+
+    <div class="card" id="app-window">
+
+    <!-- Row 2 -->
+    <div class="autorow">
+      <p>The target IP is <span class="ip-target" style="color: #0b9;" id="targetIP">10.???.???.42</span></p>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="ip-row" id="ipRow">
+      <span id="octet1" class="octet">0</span><div class="dot">.</div>
+      <span id="octet2" class="octet">0</span><div class="dot">.</div>
+      <span id="octet3" class="octet">0</span><div class="dot">.</div>
+      <span id="octet4" class="octet">0</span>
+    </div>
+
+    <!-- Row 4 -->
+    <div class="safe-zone" id="safeZone"><div>Safe Tap Zone</div></div>
+  </div>
+
+  <table>
+    <tr><td>Idle-Mode:<br>Combo-Mode:<br>Auto-Mode:</td>
+        <td>tap/tap-tap:<br>tap:<br>tap:</td>
+        <td><span class="big">+ / –</span><br><span class="big">↻</span><br><span class="big">▣</span></td>
+        <td>long/tap-long:<br>long:<br>long:</td><td><span class="big">⇒ / ⇐</span><br><span class="big">⇒</span><span class="big"></span><br>⏪</td>
+        <td>hold/tap-hold:<br>hold:<br>hold:</td><td><span class="big">⇒ / ⇐</span><br><span class="big">auto-↻</span><br>⏩</td>
+    </tr>
+  </table>
+
+
+
+
+  <!-- +- ↶↪ ⇒⇐ -->
+
+  <footer></footer>
+
+  <script src="res/js/controller-visualize.js"></script>
+  <script src="res/js/single-button-controller.js"></script>
+
+<script>
+  // === UI References ===
+  const targetIPEl = document.getElementById('targetIP');
+  const inputs = [
+    document.getElementById('octet1'),
+    document.getElementById('octet2'),
+    document.getElementById('octet3'),
+    document.getElementById('octet4')
+  ];
+  const startBtn = document.getElementById('startBtn');
+  const appwin = document.getElementById('app-window');
+
+  // === Visualizer + Controller ===
+  const visualizer = new ControllerVisualizer(appwin);
+  const controller = new ButtonController(appwin, visualizer);
+
+  // === Challenge variables ===
+  let currentOctet = 0;
+  let targetIP = [];
+  let timerStart = 0;
+  let timerInterval = null;
+  let timerRunning = false;
+
+  // === Helpers ===
+  function focusCurrentOctet() {
+    inputs.forEach(inp => inp.classList.remove('active'));
+    const current = inputs[currentOctet];
+    current.focus();
+    current.classList.add('active');
+  }
+
+  function randomTargetIP() {
+    const x = Math.floor(Math.random() * 31) + 70; // 70–100
+    const y = 255 - x + 10;
+    targetIP = [10, x, y, 42];
+    targetIPEl.textContent = targetIP.join('.');
+    resetInput();
+  }
+
+  function resetInput() {
+    currentOctet = 0;
+    inputs.forEach((el, i) => el.textContent = 0);
+    focusCurrentOctet();
+    stopTimer();
+    startBtn.textContent = "Start Challenge";
+    timerRunning = false;
+  }
+
+  function startTimer() {
+    timerStart = Date.now();
+    startBtn.textContent = "0.0s";
+    timerRunning = true;
+    timerInterval = setInterval(() => {
+      const elapsed = ((Date.now() - timerStart) / 1000).toFixed(1);
+      startBtn.textContent = elapsed + "s";
+    }, 100);
+  }
+
+  function stopTimer() {
+    clearInterval(timerInterval);
+    inputs.forEach(inp => inp.classList.remove('active'));
+    timerRunning = false;
+  }
+
+  
+  function checkCompletion() {
+    const entered = inputs.map(el => parseInt(el.textContent, 10));
+    if (entered.every((v, i) => v === targetIP[i])) {
+      stopTimer();
+      startBtn.textContent += " ✅";
+    }
+  }
+
+  // === Controller bindings ===
+  controller.onIncrease(() => {
+    let val = parseInt(inputs[currentOctet].textContent, 10);
+    val = (val + 1) % 256;
+    inputs[currentOctet].textContent = val;
+    checkCompletion();
+  });
+
+  controller.onDecrease(() => {
+    let val = parseInt(inputs[currentOctet].textContent, 10);
+    val = (val - 1 + 256) % 256;
+    inputs[currentOctet].textContent = val;
+    checkCompletion();
+  });
+
+  controller.onOk(() => {
+    currentOctet = (currentOctet + 1) % 4;
+    focusCurrentOctet();
+  });
+
+  controller.onBack(() => {
+    currentOctet = (currentOctet - 1 + 4) % 4;
+    focusCurrentOctet();
+  });
+
+  controller.onNext(() => {
+    currentOctet = (currentOctet + 1) % 4;
+    focusCurrentOctet();
+  });
+
+  controller.onPrev(() => {
+    currentOctet = (currentOctet - 1 + 4) % 4;
+    focusCurrentOctet();
+  });
+
+  controller.onMenu(() => {
+    if (currentOctet === 3) checkCompletion();
+  });
+
+  // === Challenge setup ===
+  startBtn.addEventListener('click', () => {
+    if (timerRunning) {
+      // If clicked during run → reset & stop
+      resetInput();
+      return;
+    }
+    randomTargetIP();
+    startTimer();
+    focusCurrentOctet();
+  });
+
+
+  // === Prevent click-like behavior inside app-window ===
+  (function preventClicksInsideAppWindow() {
+    const appwin = document.getElementById('app-window');
+
+    // Prevent all default click-based events
+    const blockEvents = [
+      'click', 'dblclick', 'contextmenu',
+      'mousedown', 'mouseup', 'selectstart',
+      'dragstart', 'touchstart', 'touchend'
+    ];
+
+    blockEvents.forEach(evt => {
+      appwin.addEventListener(evt, (e) => {
+        // Allow pointerdown/pointerup for controller logic
+        if (evt === 'mousedown' || evt === 'mouseup' || evt.startsWith('touch')) {
+          // Your controller logic might depend on these → only block default behavior
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        // For all others, stop completely
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }, { passive: false, capture: true });
+    });
+  })();
+
+  // randomTargetIP();
+  focusCurrentOctet();
+</script>
+</body>
+</html>
