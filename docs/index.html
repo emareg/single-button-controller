@@ -86,6 +86,7 @@
 
   <h3>Basic Commands</h3>
 
+  <figure>
   <table id="gestures">
   <colgroup>
     <col><col>
@@ -110,6 +111,7 @@
   </tbody>
   <caption>Available commands. A short tap before a command “inverts” its meaning.</caption> 
   </table>
+  </figure>
 
   <h3>Advanced Commands</h3>
   <p>To speed up navigation, we have a "combo" and "auto" mode build in. Combos: If you short tap again within 1s after a command (before the green/orange light goes off), the last command will be repeated instantly! Only if you wait longer than 1s, you can enter a new command. Only long click (“Ok”) will always be accepted. If you need more speed, hold the button extralong while in combo mode to auto-repeat the last command quickly. The longer you hold, the faster the auto-repeat. Once you release the button, the auto-repeat continues at constant speed until you single tap. </p>
@@ -124,39 +126,41 @@
     }
   </style>
 
-      <table id="commands">
-        <thead>
+  <figure>
+    <table id="commands">
+      <thead>
         <tr>
           <th colspan="1">Gesture</th>
           <th colspan="4">Idle-Mode (single / tap-before)</th>
           <th colspan="2">Combo-Mode</th>
           <th colspan="2">Auto-Mode</th>
         </tr>
-        </thead>
-        <tbody>
+      </thead>
+      <tbody>
         <tr>
-          <td>Short Tap (≤250ms)</td>
-          <td>increase</td><td>+</td><td>decrease</td><td>–</td>
+          <td>Tap (≤250ms)</td>
+          <td>inc.</td><td>+</td><td>dec.</td><td>–</td>
           <td>repeat</td><td>↻</td><td>stop</td><td>▣</td>
         </tr>
         <tr>
-          <td>Long Click (&ge;350ms)</td>
+          <td>Click (&ge;350ms)</td>
           <td>ok</td><td>↪</td><td>back</td><td>↶</td>
           <td>ok</td><td>↪</td><td>slower</td><td>⏪</td>
         </tr>
         <tr>
-          <td>Press Hold (&ge;1.3s)</td>
+          <td>Hold (&ge;1.3s)</td>
           <td>next</td><td>⇒</td><td>prev</td><td>⇐</td>
           <td>→auto-mode</td><td>🔁</td><td>faster</td><td>⏩</td>
         </tr>
-        </tbody>  
-      </table>
-
-
-
-  <h3>The LED indicator</h3>
-  <p>Since the controller should be implemented for a microcontroller, we expect to have an LED on board that we can use to provide visual feedback. So green means a positive command (+)</p>
-
+      </tbody>  
+    </table>
+  </figure>
+    
+    
+    
+    <h3>The LED indicator</h3>
+    <p>Since the controller should be implemented for a microcontroller, we expect to have an LED on board that we can use to provide visual feedback. So green means a positive command (+)</p>
+    
 
   <h2 id="demo-app">IP-Spinner demo application (playable)</h2>
   <p>The goal is to enter a random IPv4 address using a single button. The button can be pressed by clicking or touching into the outlined box below, or by using the keyboard key <code>b</code>. You can directly play around to test all commands. Once you feel ready, hit the “Start Challenge” button to measure your input time.</p>
@@ -183,14 +187,16 @@
     <div class="safe-zone" id="safeZone"><div>Safe Tap Zone</div></div>
   </div>
 
-  <table>
-    <tr><td>Idle-Mode:<br>Combo-Mode:<br>Auto-Mode:</td>
+  <figure>
+    <table>
+      <tr><td>Idle-Mode:<br>Combo-Mode:<br>Auto-Mode:</td>
         <td>tap/tap-tap:<br>tap:<br>tap:</td>
         <td><span class="big">+ / –</span><br><span class="big">↻</span><br><span class="big">▣</span></td>
         <td>long/tap-long:<br>long:<br>long:</td><td><span class="big">⇒ / ⇐</span><br><span class="big">⇒</span><span class="big"></span><br>⏪</td>
         <td>hold/tap-hold:<br>hold:<br>hold:</td><td><span class="big">⇒ / ⇐</span><br><span class="big">auto-↻</span><br>⏩</td>
-    </tr>
-  </table>
+      </tr>
+    </table>
+  </figure>
 
 
 
