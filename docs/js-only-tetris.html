@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>Tetris</title>
+
+
+</head>
+<body>
+
+
+</body>
+<script src="res/js/single-button-controller.js"></script>
+<script src="res/js/js-only-tetris.js"></script>
+
+<script>
+  const appwin = document.body;
+
+  // === Visualizer + Controller ===
+//   const visualizer = new ControllerVisualizer(appwin);
+  const controller = new ButtonController(appwin, undefined);
+
+  // === Controller bindings ===
+  controller.onIncrease(() => { GM.Pc.TryMove(1,0); });
+  controller.onDecrease(() => { GM.Pc.TryMove(-1,0); });
+
+  controller.onOk(() => { GM.Pc.TryRotate(); });
+
+  controller.onBack(() => { GM.Pc.TryRotate(true); });
+
+  controller.onNext(() => { GM.Pc.TryDrop(); });
+  controller.onPrev(() => { Init(); });
+
+  controller.onMenu(() => { Init(); });
+
+
+</script>
+
+</html>

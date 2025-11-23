@@ -203,6 +203,8 @@
 
   <!-- +- ↶↪ ⇒⇐ -->
 
+  <p>Next question: Can you even <a href="js-only-tetris.html">play tetris</a>?</p>
+
   <footer></footer>
 
   <script src="res/js/controller-visualize.js"></script>
@@ -307,7 +309,6 @@
   });
 
   controller.onNext(() => {
-    checkCompletion();
     currentOctet = (currentOctet + 1) % 4;
     focusCurrentOctet();
   });
