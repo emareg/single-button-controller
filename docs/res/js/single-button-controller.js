@@ -7,6 +7,7 @@ class ButtonController {
     this.cb = { increase: null, decrease: null, ok: null, back: null, next: null, prev: null, menu: null };
 
     // === Timing constants ===
+    this.FAST_DOUBLE_TAP_MS = 150;
     this.TAP_TIME_MAX_MS = 250;
     this.DOUBLE_TAP_GAP_MS = 200;
     this.LONG_PRESS_MS = 350;
@@ -61,6 +62,7 @@ class ButtonController {
     this.state = state;
     this.visualizer?.updateGlow(this);
     this.visualizer?.updateDebug(this);
+    this.tapSeq = 0;
   }
 
   _clearTimers() {
@@ -115,6 +117,20 @@ class ButtonController {
         if (gapDur > this.COMMAND_GAP_MS) {
           this._enter("idle");
           return;
+        }
+        if (downDur < this.FAST_DOUBLE_TAP_MS){
+          if (this.tapSeq === 0 && gapDur > downDur*2){
+            this.tapSeq = 1;
+          } else if (this.tapSeq === 1 && gapDur < 100){
+            if(this.lastCommand === "decrease"){
+              this._do("increase"); this.lastCommand = "increase";
+            } else {
+              this._do("drecrease"); this.lastCommand = "decrease";
+            }
+            break;
+          }
+        } else {
+          this.tapSeq = 0;
         }
         if (downDur < this.TAP_TIME_MAX_MS && this.lastCommand) {
           this._do(this.lastCommand);
@@ -191,7 +207,7 @@ class ButtonController {
     this.releaseTimer = setTimeout(() => {
       if (this.state === "combo") this._enter("idle");
     }, this.COMMAND_GAP_MS);
-    this.tapSeq = 0;
+    // this.tapSeq = 0;
   }
 
   // === Hold Logic ===

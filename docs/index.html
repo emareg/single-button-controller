@@ -83,6 +83,10 @@
   <!-- <p><a href="#demo-app">Skip the talk, play it now!</a></p> -->
   <p>No explanation needed? <a href="#demo-app">→ Jump to play the demo!</a></p>
 
+  <figure>
+    <img src="res/img/sbc-concept.png">
+  </figure>
+
 
   <h3>Basic Commands</h3>
 
@@ -203,9 +207,10 @@
 
   <!-- +- ↶↪ ⇒⇐ -->
 
-  <p>Next question: Can you even <a href="js-only-tetris.html">play tetris</a>?</p>
+  <p>Next question: Can you even <a href="js-only-tetris.html">play tetris</a>?<br></p>
+  <p></p>
 
-  <footer></footer>
+  <footer style="height: 5em;"></footer>
 
   <script src="res/js/controller-visualize.js"></script>
   <script src="res/js/single-button-controller.js"></script>
@@ -304,11 +309,13 @@
   });
 
   controller.onBack(() => {
+    checkCompletion();
     currentOctet = (currentOctet - 1 + 4) % 4;
     focusCurrentOctet();
   });
 
   controller.onNext(() => {
+    checkCompletion();
     currentOctet = (currentOctet + 1) % 4;
     focusCurrentOctet();
   });
