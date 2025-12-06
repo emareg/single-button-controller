@@ -6,7 +6,8 @@ class ControllerVisualizer {
     this.debug = document.createElement("pre");
     Object.assign(this.debug.style, {
       position: "fixed",
-      bottom: "40px",
+      margin: 0,
+      bottom: "10px",
       right: "10px",
       width: "180px",                // fixed width
       background: "rgba(0,0,0,0.5)",

@@ -54,7 +54,7 @@ class ButtonController {
   _do(action, step = 1) {
     if (this.cb[action]) for (let i = 0; i < step; i++) this.cb[action]();
     this.lastCommand = action;
-    this.tapSeq = 0;
+    // this.tapSeq = 0;
     this.visualizer?.updateDebug(this);
   }
 
@@ -119,21 +119,25 @@ class ButtonController {
           return;
         }
         if (downDur < this.FAST_DOUBLE_TAP_MS){
-          if (this.tapSeq === 0 && gapDur > downDur*2){
+          if (this.tapSeq === 0 && 300 < gapDur){
             this.tapSeq = 1;
           } else if (this.tapSeq === 1 && gapDur < 100){
-            if(this.lastCommand === "decrease"){
-              this._do("increase"); this.lastCommand = "increase";
-            } else {
-              this._do("drecrease"); this.lastCommand = "decrease";
-            }
+            // this.releaseTimer = setTimeout(() => this._finalizeTapSequence(), this.DOUBLE_TAP_GAP_MS);
+            // if(this.lastCommand === "decrease"){
+            //   this._do("increase"); this.lastCommand = "increase";
+            // } else {
+            //   this._do("drecrease"); this.lastCommand = "decrease";
+            // }
+            this.tapSeq = 0;
             break;
+          } else {
+            this.tapSeq = 0;
           }
         } else {
           this.tapSeq = 0;
         }
         if (downDur < this.TAP_TIME_MAX_MS && this.lastCommand) {
-          this._do(this.lastCommand);
+          this._do(this.lastCommand); //TODO: here is tapSeq = 0
           this._startComboTimeout();
         } else if (downDur >= this.LONG_PRESS_MS && downDur < this.EXTRA_LONG_MS) {
           let saveLastCmd = this.lastCommand;
@@ -170,7 +174,11 @@ class ButtonController {
       this._enter("combo");
       this._startComboTimeout();
     } else if (this.tapSeq == 2) {
-      this._do("decrease");
+      if(this.state == "combo" && this.lastCommand == "decrease"){
+        this._do("increase");
+      } else {
+        this._do("decrease");
+      }
       this._enter("combo");
       this._startComboTimeout();      
     }

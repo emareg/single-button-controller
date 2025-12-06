@@ -80,7 +80,7 @@
 <body>
   <h1>Single Button Controller</h1>
 
-  <p>A concept to emulate a 10-button game controller with just a single button!</p>
+  <p>A concept to emulate a 8-button game controller with just a single button!</p>
   <!-- <p><a href="#demo-app">Skip the talk, play it now!</a></p> -->
   <p>No explanation needed? <a href="#demo-app">→ Jump to play the demo!</a></p>
 
@@ -91,6 +91,7 @@
 
 
   <h3>Basic Commands</h3>
+  <p>The single button controller supports 8 basic command patterns:</p>
 
   <figure>
   <table id="gestures">
@@ -120,7 +121,7 @@
   </figure>
 
   <h3>Advanced Commands</h3>
-  <p>To speed up navigation, we have a "combo" and "auto" mode build in. Combos: If you short tap again within 1s after a command (before the green/orange light goes off), the last command will be repeated instantly! Only if you wait longer than 1s, you can enter a new command. Only long click (“Ok”) will always be accepted. If you need more speed, hold the button extralong while in combo mode to auto-repeat the last command quickly. The longer you hold, the faster the auto-repeat. Once you release the button, the auto-repeat continues at constant speed until you single tap. </p>
+  <p>To speed up navigation, we have a "combo" and "auto" mode build in. Combos: If you short tap again within 0.7s after a command (before the green/orange light goes off), the last command will be repeated instantly! Only if you wait longer than 0.7s, you can enter a new command. However, a long click (“Ok”) will always be accepted. If you need more speed, hold the button extralong while in combo mode to auto-repeat the last command quickly. The longer you hold, the faster the auto-repeat. Once you release the button, the auto-repeat continues at constant speed until you single tap. </p>
 
   <style>
     /* table#commands td:nth-of-type(2){ text-align: start; } */
@@ -165,7 +166,7 @@
     
     
     <h3>The LED indicator</h3>
-    <p>Since the controller should be implemented for a microcontroller, we expect to have an LED on board that we can use to provide visual feedback. So green means a positive command (+)</p>
+    <p>Since the controller should be implemented for a microcontroller, we expect to have an LED on board that we can use to provide visual feedback. So green means a positive command (+/next) and orange means a negative command (-/prev). As long as the LED is on you are in combo mode.</p>
     
 
   <h2 id="demo-app">IP-Spinner demo application (playable)</h2>
@@ -250,7 +251,7 @@
 
   function randomTargetIP() {
     const x = Math.floor(Math.random() * 31) + 70; // 70–100
-    const y = 255 - x + 10;
+    const y = 93 + x;
     targetIP = [10, x, y, 42];
     targetIPEl.textContent = targetIP.join('.');
     resetInput();
